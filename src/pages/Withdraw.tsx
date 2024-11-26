@@ -1,10 +1,8 @@
-import { useState, useEffect } from "react";
+import { formatEther } from "viem";
 import { useAccount, useReadContract, useWriteContract } from "wagmi";
-import toast from "react-hot-toast";
-import { formatEther, parseEther } from "viem";
 
 const Withdraw = () => {
-    const { isConnected, address } = useAccount();
+    const { address } = useAccount();
     const { writeContract } = useWriteContract();
 
     // Read current stake details
@@ -22,14 +20,6 @@ const Withdraw = () => {
         functionName: "getLockTimeRemaining",
         args: [address],
     }) as unknown as { data: bigint }
-
-    // Read early withdrawal fee
-    const { data: earlyWithdrawalFee } = useReadContract({
-        address: "YOUR_CONTRACT_ADDRESS" as `0x${string}`,
-        abi: ["function calculateEarlyWithdrawalFee(address) view returns (uint256)"],
-        functionName: "calculateEarlyWithdrawalFee",
-        args: [address],
-    }) as unknown as { data: bigint };
 
     const handleWithdraw = async () => {
         writeContract({

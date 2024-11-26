@@ -5,7 +5,7 @@ import { useAccount, useReadContract, useWriteContract } from "wagmi";
 
 const Dashboard = () => {
     const { address } = useAccount();
-    const { writeContract, error } = useWriteContract();
+    const { error } = useWriteContract();
 
     // Read staking contract data
     const { data: stakedAmount } = useReadContract({
