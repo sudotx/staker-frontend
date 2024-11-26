@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { formatEther, parseAbi } from "viem";
 import { useAccount, useReadContract, useWriteContract } from "wagmi";
-import { contractConfig } from "../abi";
+import { contractConfig } from "../utils/abi";
 
 const PackageCard = () => {
     const [stakeAmount, setStakeAmount] = useState<string>("");
