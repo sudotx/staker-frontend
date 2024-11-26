@@ -35,10 +35,9 @@ const Navbar = () => {
     }, [error])
 
     return (
-        <div className="fixed top-0 w-full flex justify-between py-2 px-3 md:py-10 md:px-28 backdrop-blur-md z-40">
-            <div className="my-auto">
-                <div className="text-2xl md:text-4xl my-auto font-bold">
-                </div>
+        <div className="fixed w-full flex justify-between items-center px-4 py-2 bg-black">
+            <div className="text-2xl md:text-4xl my-auto font-bold">
+                Milk Staking
             </div>
             <div className="gap-2 flex">
                 {

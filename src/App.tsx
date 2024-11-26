@@ -7,7 +7,6 @@ function App() {
   return (
     <>
       <Navbar />
-      <h1>Milk Staking</h1>
       <RouterProvider router={route} />
       <Toaster />
     </>
