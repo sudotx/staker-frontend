@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { formatEther } from "viem";
 import { useAccount, useReadContract, useWriteContract } from "wagmi";
+import { contractConfig } from "../utils/abi";
 
 const Rewards = () => {
     const { isConnected, address } = useAccount();
@@ -9,21 +10,21 @@ const Rewards = () => {
 
     // Read rewards data
     const { data: earnedRewards } = useReadContract({
-        address: "YOUR_CONTRACT_ADDRESS" as `0x${string}`,
+        address: contractConfig.address as `0x${string}`,
         abi: ["function getEarnedRewards(address) view returns (uint256)"],
         functionName: "getEarnedRewards",
         args: [address],
     }) as unknown as { data: bigint };
 
     const { data: vestingSchedule } = useReadContract({
-        address: "YOUR_CONTRACT_ADDRESS" as `0x${string}`,
+        address: contractConfig.address as `0x${string}`,
         abi: ["function getVestingSchedule(address) view returns (uint256)"],
         functionName: "getVestingSchedule",
         args: [address],
     }) as unknown as { data: bigint };
 
     const { data: claimHistory } = useReadContract({
-        address: "YOUR_CONTRACT_ADDRESS" as `0x${string}`,
+        address: contractConfig.address as `0x${string}`,
         abi: ["function getClaimHistory(address) view returns (uint256[])"],
         functionName: "getClaimHistory",
         args: [address],
@@ -31,16 +32,16 @@ const Rewards = () => {
 
     const handleClaimRewards = async () => {
         writeContract({
-            address: "YOUR_CONTRACT_ADDRESS" as `0x${string}`,
-            abi: ["function claimRewards()"],
-            functionName: "claimRewards",
+            address: contractConfig.address as `0x${string}`,
+            abi: contractConfig.abi,
+            functionName: "getRewards",
         });
     };
 
     useEffect(() => {
         if (!isConnected) return;
         if (error) {
-            toast.error(error.name);
+            toast.error(error.message);
         }
     }, [error]);
 

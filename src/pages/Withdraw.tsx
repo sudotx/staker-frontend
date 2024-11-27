@@ -1,13 +1,16 @@
 import { formatEther } from "viem";
 import { useAccount, useReadContract, useWriteContract } from "wagmi";
+import { contractConfig } from "../utils/abi";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 const Withdraw = () => {
     const { address } = useAccount();
-    const { writeContract } = useWriteContract();
+    const { writeContract, error } = useWriteContract();
 
     // Read current stake details
     const { data: currentStake } = useReadContract({
-        address: "YOUR_CONTRACT_ADDRESS" as `0x${string}`,
+        address: contractConfig.address as `0x${string}`,
         abi: ["function getStakeDetails(address) view returns (uint256, uint256)"],
         functionName: "getStakeDetails",
         args: [address],
@@ -15,7 +18,7 @@ const Withdraw = () => {
 
     // Read lock period remaining
     const { data: lockTimeRemaining } = useReadContract({
-        address: "YOUR_CONTRACT_ADDRESS" as `0x${string}`,
+        address: contractConfig.address as `0x${string}`,
         abi: ["function getLockTimeRemaining(address) view returns (uint256)"],
         functionName: "getLockTimeRemaining",
         args: [address],
@@ -23,16 +26,22 @@ const Withdraw = () => {
 
     const handleWithdraw = async () => {
         writeContract({
-            address: "YOUR_CONTRACT_ADDRESS" as `0x${string}`,
-            abi: ["function withdraw()"],
-            functionName: "withdraw",
+            address: contractConfig.address as `0x${string}`,
+            abi: contractConfig.abi,
+            functionName: "release",
         });
     };
 
+    useEffect(() => {
+        if (error) {
+            toast.error(error.message)
+        }
+    }, [error])
+
     return (
         <div>
-            <div className="max-w-2xl mx-auto mt-8">
-                <div className="bg-white/10 backdrop-blur-md p-6 rounded-lg mb-6">
+            <div className="max-w-2xl mx-auto mt-8 p-4">
+                <div className="bg-white/10 backdrop-blur-md p-6 rounded-lg mb-6 mb-6">
                     <h3 className="text-primary text-xl font-bold mb-4">Current Stake Details</h3>
                     <p className="text-white">
                         Staked Amount: {currentStake ? formatEther(currentStake[0]) : "0"} Tokens

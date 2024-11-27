@@ -36,10 +36,18 @@ const Navbar = () => {
 
     return (
         <div className="fixed w-full flex justify-between items-center px-4 py-2 bg-black">
-            <div className="text-2xl md:text-4xl my-auto font-bold">
-                Milk Staking
-            </div>
-            <div className="gap-2 flex">
+            <a href="/" className="">
+                <div className="text-2xl md:text-4xl my-auto font-bold text-white ">
+                    <p>
+                        GOT MILK?
+                    </p>
+                </div>
+            </a>
+
+            <div className="flex items-center gap-4">
+                <nav className="flex gap-4 mr-4">
+                    <a href="/dashboard" className="text-white hover:text-primary transition-colors">Dashboard</a>
+                </nav>
                 {
                     isConnected ? (
                         <button onClick={() => disconnect()} className="outline-none text-white scale-[1.01] rounded-full px-8 py-2 bg-primary">Disconnect</button>

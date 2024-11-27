@@ -1,30 +1,31 @@
 import { useEffect } from "react";
 import { useReadContract } from "wagmi";
 import { formatEther } from "viem";
+import { contractConfig } from "../utils/abi";
 
 const Stats = () => {
     // Read total metrics
     const { data: totalStaked } = useReadContract({
-        address: "YOUR_CONTRACT_ADDRESS" as `0x${string}`,
+        address: contractConfig.address as `0x${string}`,
         abi: ["function getTotalStaked() view returns (uint256)"],
         functionName: "getTotalStaked",
     }) as unknown as { data: bigint };
 
     const { data: totalRewardPoints } = useReadContract({
-        address: "YOUR_CONTRACT_ADDRESS" as `0x${string}`,
+        address: contractConfig.address as `0x${string}`,
         abi: ["function getTotalRewardPoints() view returns (uint256)"],
         functionName: "getTotalRewardPoints",
     }) as unknown as { data: bigint };
 
     const { data: programEndDate } = useReadContract({
-        address: "YOUR_CONTRACT_ADDRESS" as `0x${string}`,
+        address: contractConfig.address as `0x${string}`,
         abi: ["function getProgramEndDate() view returns (uint256)"],
         functionName: "getProgramEndDate",
     }) as unknown as { data: bigint };
 
     const { data: currentAPY } = useReadContract({
-        address: "YOUR_CONTRACT_ADDRESS" as `0x${string}`,
-        abi: ["function getCurrentAPY() view returns (uint256)"],
+        address: contractConfig.address as `0x${string}`,
+        abi: contractConfig.abi,
         functionName: "getCurrentAPY",
     }) as unknown as { data: bigint };
 

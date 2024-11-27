@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
-import { useAccount, useReadContract, useWriteContract } from "wagmi";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { formatEther, parseEther } from "viem";
+import { useReadContract, useWriteContract } from "wagmi";
+import { contractConfig } from "../utils/abi";
 
 const STAKING_PERIODS = [
     { days: 30, apy: "10%" },
@@ -15,12 +16,11 @@ const STAKING_PERIODS = [
 const Staking = () => {
     const [amount, setAmount] = useState<string>("");
     const [selectedPeriod, setSelectedPeriod] = useState(STAKING_PERIODS[0]);
-    const { isConnected, address } = useAccount();
     const { writeContract, error } = useWriteContract();
 
     // Read staking limits
     const { data: stakingLimit } = useReadContract({
-        address: address,
+        address: contractConfig.address as `0x${string}`,
         abi: ["function getStakingLimit(uint256) view returns (uint256)"],
         functionName: "getStakingLimit",
         args: [selectedPeriod.days],
@@ -36,24 +36,18 @@ const Staking = () => {
     const handleStake = async () => {
         if (!amount) return toast.error("Please enter an amount");
 
-        try {
-            await writeContract({
-                address: "YOUR_CONTRACT_ADDRESS" as `0x${string}`,
-                abi: ["function stake(uint256 amount, uint256 period)"],
-                functionName: "stake",
-                args: [parseEther(amount), selectedPeriod.days],
-            });
-            toast.success("Tokens staked successfully!");
-            setAmount("");
-        } catch (err) {
-            toast.error("Failed to stake tokens");
-        }
+        writeContract({
+            address: contractConfig.address as `0x${string}`,
+            abi: contractConfig.abi,
+            functionName: "lockTokens",
+            args: [parseEther(amount), selectedPeriod.days],
+        });
+        setAmount("");
     };
 
     useEffect(() => {
-        if (!isConnected) return;
         if (error) {
-            toast.error(error.name);
+            toast.error(error.message);
         }
     }, [error]);
 

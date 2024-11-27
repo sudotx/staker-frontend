@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { formatEther } from "viem";
 import { useAccount, useReadContract, useWriteContract } from "wagmi";
+import { contractConfig } from "../utils/abi";
 
 const Dashboard = () => {
     const { address } = useAccount();
@@ -9,29 +10,29 @@ const Dashboard = () => {
 
     // Read staking contract data
     const { data: stakedAmount } = useReadContract({
-        address: "YOUR_CONTRACT_ADDRESS" as `0x${string}`,
-        abi: ["function stakedBalance(address) view returns (uint256)"],
+        address: contractConfig.address as `0x${string}`,
+        abi: contractConfig.abi,
         functionName: "stakedBalance",
         args: [address],
     }) as unknown as { data: bigint };
 
     const { data: rewardPoints } = useReadContract({
-        address: "YOUR_CONTRACT_ADDRESS" as `0x${string}`,
-        abi: ["function getRewardPoints(address) view returns (uint256)"],
+        address: contractConfig.address as `0x${string}`,
+        abi: contractConfig.abi,
         functionName: "getRewardPoints",
         args: [address],
     }) as unknown as { data: bigint };
 
     const { data: lpBalance } = useReadContract({
-        address: "YOUR_LP_TOKEN_ADDRESS" as `0x${string}`,
+        address: contractConfig.lptoken as `0x${string}`,
         abi: ["function balanceOf(address) view returns (uint256)"],
         functionName: "balanceOf",
         args: [address],
     }) as unknown as { data: bigint };
 
     const { data: stakingEndTime } = useReadContract({
-        address: "YOUR_CONTRACT_ADDRESS" as `0x${string}`,
-        abi: ["function stakingEndTime() view returns (uint256)"],
+        address: contractConfig.address as `0x${string}`,
+        abi: contractConfig.abi,
         functionName: "stakingEndTime",
     }) as unknown as { data: bigint };
 
@@ -53,12 +54,11 @@ const Dashboard = () => {
 
             <div className="py-20 md:py-32 px-3 overflow-y-auto h-screen w-full">
                 <div>
-                    <p className="font-bold text-2xl text-center md:text-5xl text-white">DASHBOARD</p>
-
                     <div className="grid md:grid-cols-2 gap-6 mt-8">
                         {/* Staking Status Card */}
                         <div className="bg-white/10 backdrop-blur-md p-6 rounded-lg">
-                            <h3 className="text-primary text-xl font-bold mb-4">Current Stake Status</h3>
+
+                            <h3 className="text-xl font-bold mb-4">Current Stake Status</h3>
                             <p className="text-white">
                                 Staked Amount: {stakedAmount ? formatEther(stakedAmount) : "0"} Tokens
                             </p>
@@ -66,7 +66,9 @@ const Dashboard = () => {
 
                         {/* Reward Points Card */}
                         <div className="bg-white/10 backdrop-blur-md p-6 rounded-lg">
-                            <h3 className="text-primary text-xl font-bold mb-4">Reward Points</h3>
+                            <a href="/rewards">
+                                <h3 className="text-white text-xl font-bold mb-4 hover:text-primary transition-colors">Reward Points</h3>
+                            </a>
                             <p className="text-white">
                                 Points Earned: {rewardPoints ? formatEther(stakedAmount) : "0"} Points
                             </p>
@@ -74,7 +76,9 @@ const Dashboard = () => {
 
                         {/* LP Token Balance Card */}
                         <div className="bg-white/10 backdrop-blur-md p-6 rounded-lg">
-                            <h3 className="text-primary text-xl font-bold mb-4">LP Token Balance</h3>
+                            <a href="/withdraw">
+                                <h3 className="text-white text-xl font-bold mb-4  hover:text-primary transition-colors">LP Token Balance</h3>
+                            </a>
                             <p className="text-white">
                                 Available Balance: {lpBalance ? formatEther(lpBalance) : "0"} LP
                             </p>
@@ -82,7 +86,9 @@ const Dashboard = () => {
 
                         {/* Time Remaining Card */}
                         <div className="bg-white/10 backdrop-blur-md p-6 rounded-lg">
-                            <h3 className="text-primary text-xl font-bold mb-4">Staking Duration</h3>
+                            <a href="/stats">
+                                <h3 className="text-white text-xl font-bold mb-4 hover:text-primary transition-colors">Staking Duration</h3>
+                            </a>
                             <p className="text-white">
                                 Time Remaining: {stakingEndTime ? "Calculate time" : "Not staked"}
                             </p>

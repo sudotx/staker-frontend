@@ -1,5 +1,6 @@
 export const contractConfig = {
     "address": "0xBd4089Cc3B7903A582F4Fa7b8351F8ad59f3a8e4",
+    "lptoken": "0x93323bB3896C5eff97320BC63E4FbccB41D0C8C4",
     "abi": [
         {
             "type": "constructor",
